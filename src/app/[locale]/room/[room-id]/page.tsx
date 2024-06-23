@@ -2,6 +2,7 @@
 
 import { RoomResponse } from '@/app/models/room-model'
 import { getRoomById } from '@/app/services/room-setvice'
+import { Input } from '@/components/ui/input'
 import {
   Table,
   TableBody,
@@ -39,33 +40,43 @@ export default function Page({
   }, [roomId])
 
   return (
-    <div className='max-w-[1280px] mx-auto p-8 shadow-lg bg-white mt-20'>
-      <Table aria-label="Example static collection table" >
-        <TableHeader className='bg-gray-200'>
-          <TableRow>
-            <TableHead className='text-center'>First Name</TableHead>
-            <TableHead className='text-center'>Last Name</TableHead>
-            <TableHead className='text-center'>Phone</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody >
-          {room ? (
-            room.users.map((item, index) => (
-              <TableRow key={index} className='text-center'>
-                <TableCell>{item.firstName}</TableCell>
-                <TableCell>{item.lastName}</TableCell>
-                <TableCell>{item.phone}</TableCell>
+    <div>
+      <div className='max-w-[1280px] mx-auto '>
+        <div className=' shadow-lg bg-white mt-20 p-8'>
+          <div className='relative'>
+            <svg className="lucide lucide-search absolute top-2 left-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
+            <Input type="text" placeholder="search" className='w-1/4 pl-10' />
+          </div>
+
+          <Table aria-label="Example static collection table " className='mt-4'>
+            <TableHeader className='bg-gray-200'>
+              <TableRow>
+                <TableHead className='text-center'>First Name</TableHead>
+                <TableHead className='text-center'>Last Name</TableHead>
+                <TableHead className='text-center'>Phone</TableHead>
               </TableRow>
-            ))
-          ) : (
-            <TableRow className='text-center'>
-              <TableCell >Loading...</TableCell>
-              <TableCell >Loading...</TableCell>
-              <TableCell>Loading...</TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+            </TableHeader>
+            <TableBody >
+              {room ? (
+                room.users.map((item, index) => (
+                  <TableRow key={index} className='text-center'>
+                    <TableCell>{item.firstName}</TableCell>
+                    <TableCell>{item.lastName}</TableCell>
+                    <TableCell>{item.phone}</TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow className='text-center'>
+                  <TableCell >Loading...</TableCell>
+                  <TableCell >Loading...</TableCell>
+                  <TableCell>Loading...</TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
+
     </div>
   )
 }
