@@ -6,14 +6,15 @@ import { Input } from '@/components/ui/input'
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
 import React, { useEffect, useState } from 'react'
+
+
+type SortByType = "firstName" | "lastName" | "createdDate" | ""
 
 export default function Page({
   params
@@ -22,6 +23,7 @@ export default function Page({
 }) {
   const roomId = params["room-id"]
   const [room, setRoom] = useState<RoomResponse>()
+  const [sortBy, setSortBy] = useState<SortByType>('')
   const [search, setSearch] = useState('')
 
   const getRoomApi = async (roomId: string, search?: string, sortBy?: string) => {
@@ -35,6 +37,11 @@ export default function Page({
     }
   }
 
+  const handleSetSort = (sort: SortByType) => {
+    setSortBy(sort)
+    getRoomApi(roomId, search, sortBy)
+  }
+
   useEffect(() => {
     if (!roomId) return
     getRoomApi(roomId)
@@ -44,12 +51,29 @@ export default function Page({
     <div>
       <div className='max-w-[1280px] mx-auto '>
         <div className=' shadow-lg bg-white mt-20 p-8'>
-          <div className='relative'>
-            <svg className="lucide lucide-search absolute top-2 left-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
-            <Input onChange={(e) => {
-              const searchString = e.target.value
-              getRoomApi(roomId, searchString)
-            }} type="text" placeholder="search" className='w-[200px] pl-10' />
+          <div className='flex flex-row gap-8'>
+            <div className='relative'>
+              <svg className="lucide lucide-search absolute top-2 left-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
+              <Input value={search} onChange={(e) => {
+                const searchString = e.target.value
+                setSearch(searchString)
+                getRoomApi(roomId, searchString, sortBy)
+              }} type="text" placeholder="search" className='w-[200px] pl-10' />
+            </div>
+            <div className='flex gap-4 items-center'>
+              <div onClick={() => handleSetSort('')} className={`px-6 py-2 rounded-lg  text-white cursor-pointer  ${sortBy === "" ? "bg-sky-500" : "bg-gray-300"}`}>
+                All
+              </div>
+              <div onClick={() => handleSetSort('firstName')} className={`px-6 py-2 rounded-lg ${sortBy === "firstName" ? "bg-sky-500" : "bg-gray-300"} text-white cursor-pointer`}>
+                FirstName
+              </div>
+              <div onClick={() => handleSetSort('lastName')} className={`px-6 py-2 rounded-lg ${sortBy === "lastName" ? "bg-sky-500" : "bg-gray-300"} text-white cursor-pointer`}>
+                LastName
+              </div>
+              <div onClick={() => handleSetSort('createdDate')} className={`px-6 py-2 rounded-lg ${sortBy === "createdDate" ? "bg-sky-500" : "bg-gray-300"} text-white cursor-pointer`}>
+                Create Date
+              </div>
+            </div>
           </div>
 
           <Table aria-label="Example static collection table " className='mt-4'>
