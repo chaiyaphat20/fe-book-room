@@ -37,19 +37,23 @@ export default function Home() {
   const [rooms, setRooms] = useState<RoomResponse[]>([])
   const [selectRooms, setSelectRooms] = useState<RoomResponse>()
   const [open, setOpen] = useState(false);
+  const [openLimitRoom, setOpenLimitRoom] = useState(false);
   const router = useRouter()
   const dispatch = useDispatch()
   const { isRefresh } = useAppSelector(state => state.loadingStore)
+
+  const [numberRoom, setNumberRoom] = useState(0)
 
   const { data: session } = useSession();
   const isLogin = !!session
   console.log(isLogin)
 
-  const method = useForm<UserRegisterBody>({
+  const form = useForm<UserRegisterBody>({
     resolver: zodResolver(UserRegisterSchema),
   })
 
-  const { register, handleSubmit, formState: { errors }, reset } = method
+  const { register, handleSubmit, formState: { errors }, reset } = form
+
 
   const getRoomApi = async () => {
     try {
@@ -69,8 +73,8 @@ export default function Home() {
       dispatch(setIsLoading(true))
       await setLimitRoom(roomId, newLimit)
       toast.success("Set Limit room success")
-      console.log("Set Limit room success")
       dispatch(setIsRefresh(true))
+      setOpenLimitRoom(false)
     } catch (error: any) {
       toast.error(error.message)
     } finally {
@@ -96,6 +100,17 @@ export default function Home() {
     } finally {
     }
   }
+
+  // const onSubmitSetLimitRoom = async (values: UserRegisterBody) => {
+  //   try {
+  //     const body: UserRegisterBody = { firstName: values.firstName, lastName: values.lastName, phone: values.phone, roomId: selectRooms?._id ?? "" }
+  //     await registerUser(body)
+  //     router.push(`/room/${selectRooms?._id}`)
+  //   } catch (error: any) {
+  //     toast.error(error.message)
+  //   } finally {
+  //   }
+  // }
 
   const handleSelectRoom = (room: RoomResponse) => {
     if (isLogin) {
@@ -160,7 +175,9 @@ export default function Home() {
                   </div>
                 </div>
                 <Button className="mt-4" onClick={() => {
-                  setRoomApi(room._id, 11)
+                  // setRoomApi(room._id, 11)
+                  setOpenLimitRoom(true)
+                  setSelectRooms(room)
                 }}>Set ที่นั่ง</Button>
               </div>
             </div>
@@ -218,8 +235,38 @@ export default function Home() {
               </form>
             </DialogContent>
           </Dialog>
+
         </>
         }
+        <div>
+          <Dialog open={openLimitRoom} onOpenChange={setOpenLimitRoom}>
+            <DialogContent className="sm:max-w-[425px]">
+
+              <DialogHeader>
+                <DialogTitle>Set limit room : {selectRooms?.name}</DialogTitle>
+                <DialogDescription>
+                  กำหนดจำนวนที่นั่งในห้อง
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="flex items-center gap-4">
+                  <Input
+                    type="number"
+                    min={0}
+                    value={numberRoom}
+                    id="numberRoom"
+                    placeholder="Please enter limit room"
+                    onChange={(e) => setNumberRoom(+ e.target.value)}
+                    className="w-full"
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button onClick={() => setRoomApi(selectRooms?._id ?? "", numberRoom)}>ตกลง</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
     </section>
   );
