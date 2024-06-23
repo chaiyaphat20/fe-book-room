@@ -12,6 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import React, { useEffect, useState } from 'react'
+import dayjs from 'dayjs'
 
 
 type SortByType = "firstName" | "lastName" | "createdDate" | ""
@@ -39,7 +40,7 @@ export default function Page({
 
   const handleSetSort = (sort: SortByType) => {
     setSortBy(sort)
-    getRoomApi(roomId, search, sortBy)
+    getRoomApi(roomId, search, sort)
   }
 
   useEffect(() => {
@@ -82,6 +83,7 @@ export default function Page({
                 <TableHead className='text-center'>First Name</TableHead>
                 <TableHead className='text-center'>Last Name</TableHead>
                 <TableHead className='text-center'>Phone</TableHead>
+                <TableHead className='text-center'>CreatedAt</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody >
@@ -91,12 +93,14 @@ export default function Page({
                     <TableCell>{item.firstName}</TableCell>
                     <TableCell>{item.lastName}</TableCell>
                     <TableCell>{item.phone}</TableCell>
+                    <TableCell>{dayjs(item.createdAt).format("HH:mm:ss น. DD/MM/YYYY")}</TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow className='text-center'>
                   <TableCell >Loading...</TableCell>
                   <TableCell >Loading...</TableCell>
+                  <TableCell>Loading...</TableCell>
                   <TableCell>Loading...</TableCell>
                 </TableRow>
               )}
