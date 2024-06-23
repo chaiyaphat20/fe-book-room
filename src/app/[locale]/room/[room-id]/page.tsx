@@ -68,7 +68,7 @@ export default function Page({
             <div onClick={() => handleSetSort('')} className={`px-6 py-2 items-center justify-center flex rounded-lg  text-white cursor-pointer  ${sortBy === "" ? "bg-sky-500" : "bg-gray-300"}`}>
               All
             </div>
-            <div className=' gap-4 items-center grid grid-cols-3'>
+            <div className=' gap-4 items-center grid grid-cols-3 text-sm text-wrap'>
               <div onClick={() => handleSetSort('firstNameAsc')} className={`px-6 py-2 rounded-lg ${sortBy === "firstNameAsc" ? "bg-sky-500" : "bg-gray-300"} text-white cursor-pointer`}>
                 FirstNameAsc
               </div>
@@ -93,6 +93,7 @@ export default function Page({
           <Table aria-label="Example static collection table " className='mt-4'>
             <TableHeader className='bg-gray-200'>
               <TableRow>
+                <TableHead className='text-center'>No.</TableHead>
                 <TableHead className='text-center'>First Name</TableHead>
                 <TableHead className='text-center'>Last Name</TableHead>
                 <TableHead className='text-center'>Phone</TableHead>
@@ -103,6 +104,7 @@ export default function Page({
               {room ? (
                 room.users.map((item, index) => (
                   <TableRow key={index} className='text-center'>
+                    <TableCell>{index + 1}</TableCell>
                     <TableCell>{item.firstName}</TableCell>
                     <TableCell>{item.lastName}</TableCell>
                     <TableCell>{item.phone}</TableCell>
