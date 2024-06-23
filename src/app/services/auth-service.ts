@@ -1,8 +1,8 @@
 import axios from "axios"
-import { SingInInBody, SingInInResponse } from "../models/auth-model"
+import { SigInType, SingInInResponse } from "../models/auth-model"
 import { axiosInstance } from "../utils/axios-instance"
 
-export async function signInApi(body: SingInInBody): Promise<SingInInResponse> {
+export async function signInApi(body: SigInType): Promise<SingInInResponse> {
   try {
     const response = await axiosInstance.post(`/admin/login`, body)
     return response.data

@@ -4,7 +4,9 @@ import { NextRequest } from 'next/server'
 import { locales } from './navigation'
 
 const publicPages = [
-  '/',
+  "/",
+  "",
+  '/.*',
   '/login',
   '/room/.*'
 ]

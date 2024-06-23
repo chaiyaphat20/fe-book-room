@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const FormSchema = z.object({
+export const SigInSchema = z.object({
   email: z
     .string()
     .min(1, { message: 'Required' })
@@ -20,13 +20,7 @@ export const FormSchema = z.object({
   }),
 })
 
-export type FormType = z.infer<typeof FormSchema>
-
-export interface SingInInBody {
-  email: string
-  password: string
-}
-
+export type SigInType = z.infer<typeof SigInSchema>
 export interface SingInInResponse {
   _id: string
   firstName: string

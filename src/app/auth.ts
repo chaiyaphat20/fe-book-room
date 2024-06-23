@@ -1,7 +1,7 @@
 import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { SingInInBody } from './models/auth-model'
 import { signInApi } from './services/auth-service'
+import { SigInType } from './models/auth-model'
 
 const authOptions: NextAuthOptions = {
   session: {
@@ -16,9 +16,11 @@ const authOptions: NextAuthOptions = {
           email: string
           password: string
         }
-        const body: SingInInBody = { email, password }
+        const body: SigInType = { email, password }
         try {
+          console.log({ body })
           const response = await signInApi(body)
+          console.log({ response: response._id })
           const { firstName, lastName, email, _id } = response
           if (firstName) {
             return {

@@ -24,12 +24,15 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { DialogClose } from "@radix-ui/react-dialog";
+import { setIsLoading } from "../lib/redux/features/loadingSlice";
+import { useDispatch } from "react-redux";
 
 export default function Home() {
   const [rooms, setRooms] = useState<RoomResponse[]>([])
   const [selectRooms, setSelectRooms] = useState<RoomResponse>()
   const [open, setOpen] = useState(false);
   const router = useRouter()
+  const dispatch = useDispatch()
 
   const method = useForm<UserRegisterBody>({
     resolver: zodResolver(UserRegisterSchema),
@@ -39,12 +42,13 @@ export default function Home() {
 
   const getRoomApi = async () => {
     try {
+      dispatch(setIsLoading(false))
       const response = await getRooms()
       setRooms(response)
     } catch (error: any) {
       toast.error(error.message)
     } finally {
-
+      dispatch(setIsLoading(true))
     }
   }
 
@@ -86,58 +90,6 @@ export default function Home() {
         })}
       </section>
       {selectRooms && <>
-        {/* <Modal
-          isOpen={isOpen}
-          onOpenChange={onOpenChange}
-          placement="top-center"
-        >
-          <ModalContent>
-            {(onClose: any) => (
-              <>
-                <ModalHeader className="flex flex-col gap-1">ลงเชื่อเข้าทำงาน ห้อง: {selectRooms.name} </ModalHeader>
-
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <ModalBody>
-                    <Input
-                      {...register('firstName')}
-                      autoFocus
-                      label="First Name"
-                      placeholder="Enter your first name"
-                      variant="bordered"
-                    />
-                    <Input
-                      {...register('lastName')}
-                      label="Last Name"
-                      placeholder="Enter your last name"
-                      variant="bordered"
-                    />
-                    <Input
-                      {...register('phone')}
-                      label="Phone"
-                      placeholder="Enter your phone"
-                      type="text"
-                      variant="bordered"
-                      onKeyDown={onKeyDownOnlyNumber}
-                    />
-                  </ModalBody>
-
-                  <ModalFooter>
-                    <Button color="danger" variant="flat" onPress={() => {
-                      reset()
-                      onClose()
-                    }}>
-                      Close
-                    </Button>
-
-                    <Button color="primary" variant="flat" type="submit" >
-                      OK
-                    </Button>
-                  </ModalFooter>
-                </form>
-              </>
-            )}
-          </ModalContent>
-        </Modal> */}
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogContent className="sm:max-w-[425px]">
             <form onSubmit={handleSubmit(onSubmit)}>
