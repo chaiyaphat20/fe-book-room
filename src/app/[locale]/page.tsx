@@ -174,7 +174,7 @@ export default function Home() {
                     <h2>{room.remainingSeats}</h2>
                   </div>
                 </div>
-                <Button className="mt-4" onClick={() => {
+                <Button className={`mt-4 ${isLogin ? 'block' : "hidden"}`} onClick={() => {
                   // setRoomApi(room._id, 11)
                   setOpenLimitRoom(true)
                   setSelectRooms(room)
