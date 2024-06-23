@@ -15,9 +15,9 @@ export async function getRooms(): Promise<RoomResponse[]> {
   }
 }
 
-export async function getRoomById(roomId: string): Promise<RoomResponse> {
+export async function getRoomById(roomId: string, search?: string, sortBy?: string): Promise<RoomResponse> {
   try {
-    const response = await axiosInstance.get(`/room/${roomId}`)
+    const response = await axiosInstance.get(`/room/${roomId}?search=${search}&sortBy=${sortBy}`)
     return response.data
   } catch (error: any) {
     if (axios.isAxiosError(error)) {

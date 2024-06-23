@@ -22,10 +22,11 @@ export default function Page({
 }) {
   const roomId = params["room-id"]
   const [room, setRoom] = useState<RoomResponse>()
+  const [search, setSearch] = useState('')
 
-  const getRoomApi = async (roomId: string) => {
+  const getRoomApi = async (roomId: string, search?: string, sortBy?: string) => {
     try {
-      const response = await getRoomById(roomId)
+      const response = await getRoomById(roomId, search ?? "", sortBy ?? "")
       setRoom(response)
     } catch (error: any) {
       console.error(error.message)
@@ -45,7 +46,10 @@ export default function Page({
         <div className=' shadow-lg bg-white mt-20 p-8'>
           <div className='relative'>
             <svg className="lucide lucide-search absolute top-2 left-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
-            <Input type="text" placeholder="search" className='w-[200px] pl-10' />
+            <Input onChange={(e) => {
+              const searchString = e.target.value
+              getRoomApi(roomId, searchString)
+            }} type="text" placeholder="search" className='w-[200px] pl-10' />
           </div>
 
           <Table aria-label="Example static collection table " className='mt-4'>
