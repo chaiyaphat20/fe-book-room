@@ -4,6 +4,9 @@ import "./globals.css";
 import { NextIntlClientProvider, useMessages } from 'next-intl'
 import { ReactNode } from "react";
 import StoreProvider from "../lib/redux/StoreProvider";
+import { SessionProvider } from "next-auth/react";
+import { NextAuthProvider } from "./NextAuthProvider";
+import MainLayout from "./main-layout";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,7 +22,7 @@ type Props = {
 }
 export default function RootLayout({
   children,
-  params: { locale }
+  params: { locale },
 }: Props) {
   const messages = useMessages()
   return (
@@ -27,7 +30,11 @@ export default function RootLayout({
       <body className={inter.className}>
         <StoreProvider>
           <NextIntlClientProvider locale={locale} messages={messages}>
-            {children}
+            <NextAuthProvider>
+              <MainLayout>
+                {children}
+              </MainLayout>
+            </NextAuthProvider>
           </NextIntlClientProvider>
         </StoreProvider>
       </body>

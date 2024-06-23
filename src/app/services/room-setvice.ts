@@ -27,3 +27,17 @@ export async function getRoomById(roomId: string): Promise<RoomResponse> {
     }
   }
 }
+
+
+export async function setLimitRoom(roomId: string, newLimit: number): Promise<RoomResponse[]> {
+  try {
+    const response = await axiosInstance.post(`/room/limit/${roomId}`, { newLimit })
+    return response.data
+  } catch (error: any) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message || 'An error occurred')
+    } else {
+      throw new Error(error.message || 'An unknown error occurred')
+    }
+  }
+}

@@ -26,7 +26,6 @@ export default function LoginPage() {
   const onSubmit = async (value: SigInType) => {
     dispatch(setIsLoading(true))
     try {
-      router.replace('/')
       const res = await signIn('credentials', {
         email: value.email, password: value.password, redirect: false
       })
